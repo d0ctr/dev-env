@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# coloring
+NO_FORMAT="\033[0m"
+C_RED="\033[38;5;9m"
+C_PURPLE="\033[38;5;5m"
+
+# A function that accepts 2 arguments "model" and "content"
+request() {
+  model=$1
+  content=$2
+  response=$(curl -s https://api.openai.com/v1/chat/completions \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -d '{
+        "model":"'"$model"'",
+        "messages":[
+            {"role": "system", "content": "you are a cli assistant, respond with informative but rapid answers, consider that your answer will be directly printed to terminal"},
+            {"role": "user", "content": "'"$content"'"}
+        ]}')
+  text=$(echo $response | jq -r '.choices[0].message.content')
+
+  if [ -z "$text" ] || [ "$text" == "null" ]; then
+
+    error=$(echo $response | jq -r '.error.message')
+    if [ -z "$error" ] || [ "$error" == "null" ]; then
+        echo -e "${C_RED}No response${NO_FORMAT}"
+    else
+        echo -e "${C_RED}$error${NO_FORMAT}"
+    fi
+
+    exit 1
+  fi
+
+  echo -e "${C_PURPLE}>${NO_FORMAT} $text"
+}
+
+# List of available models ("gpt-4 gpt-3.5-turbo")
+models=("gpt-4" "gpt-3.5-turbo")
+
+# print help message
+print_help() {
+  echo "This script sends a request using OpenAI API to generate chat completions"
+  echo "Usage: ${0##*/} [OPTIONS] QUERY"
+  echo "Options:"
+  echo "  -m, --model MODEL    Specify the model to use (default: gpt-3.5-turbo)"
+  echo "                       Supported models: \"gpt-3.5(-turbo)\", \"gpt-4\""
+  echo
+  echo "  -h, --help           Print this help message"
+}
+
+# Arguments and query parsing
+model="gpt-3.5-turbo"
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -m|--model)
+      model=$2
+      shift 2
+      ;;
+    -h|--help)
+      print_help
+      exit 0
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+# if not reading from piping, check if there is a query argument
+if [ -t 0 ] && [ $# -eq 0 ]; then
+  echo -e "${C_RED}Error: No input provided${NO_FORMAT}"
+  print_help
+  exit 1
+fi
+
+# read from piping or use the provided query argument
+if [ -t 0 ]; then
+  query="$@"
+else
+  query=$(cat)
+fi
+
+# check that the model is in the list of models
+if ! [[ " ${models[*]} " =~ " $model " ]]; then
+  echo -e "${C_RED}Error: Model '$model' is not supported${NO_FORMAT}"
+  exit 1
+fi
+
+# check that the variable OPENAI_API_KEY is specified
+if [ -z "$OPENAI_API_KEY" ]; then
+  echo -e "${C_RED}Error: OPENAI_API_KEY is not specified${NO_FORMAT}"
+  exit 1
+fi
+
+# if the model is "gpt-3.5", it should be changed to "gpt-3.5-turbo"
+if [ "$model" == "gpt-3.5" ]; then
+  model="gpt-3.5-turbo"
+elif [ "$model" == "gpt-4" ]; then
+  model="gpt-4-1106-preview"
+fi
+
+# call request function with the model and query
+request $model "$query"

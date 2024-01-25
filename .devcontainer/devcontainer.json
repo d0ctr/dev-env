@@ -8,7 +8,8 @@
     },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20"
-    }
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {},
   },
   "customizations": {
     "vscode": {
@@ -16,8 +17,9 @@
             "terminal.integrated.defaultProfile.linux": "zsh",
             "terminal.integrated.profiles.linux": { "zsh": { "path": "/bin/zsh" } },
             "workbench.colorTheme": "GitHub Dark Default",
-            "editor.fontFamily": "'Roboto Mono', 'Courier New', monospace",
-        },
+            "editor.fontFamily": "'Roboto Mono', 'Courier New', monospace"
+        }
     }
   },
+  "postCreateCommand":  "mkdir /home/vscode/.local /home/vscode/.local/bin && cp -r ./bin/* /home/vscode/.local/bin/"
 }
