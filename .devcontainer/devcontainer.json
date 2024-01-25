@@ -1,6 +1,6 @@
 {
   "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {,
+  "features": {
     "ghcr.io/wxw-matt/devcontainer-features/apt:latest": {
 			"packages": "curl build-essentials zsh"
     },
