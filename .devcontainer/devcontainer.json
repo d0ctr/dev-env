@@ -1,0 +1,15 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {,
+    "ghcr.io/wxw-matt/devcontainer-features/apt:latest": {
+			"packages": "curl build-essentials zsh"
+    },
+    "ghcr.io/wxw-matt/devcontainer-features/command_runner:0": {
+      "command1": "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+    },
+    "ghcr.io/devcontainers/features/desktop-lite:1": {},
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  }
+}
