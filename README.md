@@ -8,5 +8,5 @@ This repo contains configuration to setup my usual development environment
 
 ## Installation
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/d0ctr/dev-env/master/install.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/d0ctr/dev-env/main/install.sh)"
 ```
