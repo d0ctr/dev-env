@@ -5,6 +5,15 @@ NO_FORMAT="\033[0m"
 C_RED="\033[38;5;9m"
 C_PURPLE="\033[38;5;5m"
 
+# check the dependencies
+dependencies=("jq" "curl")
+for dependency in $dependencies; do
+  if ! command -v "$dependency" &> /dev/null ; then
+    echo -e "${C_RED}Error: unsatisfied dependency $dependency${NO_FORMAT}"
+    exit 1
+  fi
+done
+
 # A function that accepts 2 arguments "model" and "content"
 request() {
   model=$1
@@ -83,7 +92,7 @@ else
 fi
 
 # check that the model is in the list of models
-if ! [[ " ${models[*]} " =~ " $model " ]]; then
+if ! [[ "${models[*]}" =~ "$model" ]]; then
   echo -e "${C_RED}Error: Model '$model' is not supported${NO_FORMAT}"
   exit 1
 fi
