@@ -2,9 +2,9 @@
 This repo contains configuration to setup my usual development environment
 
 ## Utils
-  - [gpt](bin/gpt) -- request help from gpt <br/>
-    depends on: `jq`, `curl` <br/>
-    requires: [`OPENAIAPI_KEY`](https://platform.openai.com/account/api-keys)
+  - [gpt](bin/gpt) - Request help from gpt <br/>
+    DEPENDS: `jq`, `curl` <br/>
+    REQUIRES: [`OPENAI_API_KEY`](https://platform.openai.com/account/api-keys)
 
 ## Installation
 ```bash
