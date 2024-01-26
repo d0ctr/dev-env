@@ -4,6 +4,7 @@
 NO_FORMAT="\033[0m"
 C_RED="\033[38;5;9m"
 C_PURPLE="\033[38;5;5m"
+C_CYAN="\033[38;5;14m"
 
 # check the dependencies
 dependencies=("jq" "curl")
@@ -14,10 +15,24 @@ for dependency in $dependencies; do
   fi
 done
 
-# A function that accepts 2 arguments "model" and "content"
+# spinner animation function
+spin() {
+  local spin_chars="⡿⢿⣻⣽⣾⣷⣯⣟"
+  local i=0
+  while [ true ]; do
+    printf "\r${C_CYAN}${spin_chars:i++%8:1}${NO_FORMAT} "
+    sleep 0.1
+  done
+}
+# a function that accepts 2 arguments "model" and "content"
 request() {
   model=$1
   content=$2
+
+  # start spinner animation in the background
+  spin &
+  spinner_pid=$!
+
   response=$(curl -s https://api.openai.com/v1/chat/completions \
     -H "Content-Type: application/json" \
     -H "Authorization: Bearer $OPENAI_API_KEY" \
@@ -27,6 +42,11 @@ request() {
             {"role": "system", "content": "you are a cli assistant, respond with informative but rapid answers, consider that your answer will be directly printed to terminal"},
             {"role": "user", "content": "'"$content"'"}
         ]}')
+
+  # stop spinner animation
+  kill $spinner_pid &> /dev/null
+  printf "\r"
+
   text=$(echo $response | jq -r '.choices[0].message.content')
 
   if [ -z "$text" ] || [ "$text" == "null" ]; then
