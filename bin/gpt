@@ -7,7 +7,7 @@ C_PURPLE="\033[38;5;5m"
 C_CYAN="\033[38;5;14m"
 
 # check the dependencies
-dependencies=("jq" "curl")
+dependencies=" jq curl "
 for dependency in $dependencies; do
   if ! command -v "$dependency" &> /dev/null ; then
     echo -e "${C_RED}Error: unsatisfied dependency $dependency${NO_FORMAT}"
@@ -65,7 +65,7 @@ request() {
 }
 
 # List of available models ("gpt-4 gpt-3.5-turbo")
-models=("gpt-4" "gpt-3.5-turbo")
+models=" gpt-4 gpt-3.5-turbo gpt-3.5 "
 
 # print help message
 print_help() {
@@ -73,7 +73,7 @@ print_help() {
   echo "Usage: ${0##*/} [OPTIONS] QUERY"
   echo "Options:"
   echo "  -m, --model MODEL    Specify the model to use (default: gpt-3.5-turbo)"
-  echo "                       Supported models: \"gpt-3.5(-turbo)\", \"gpt-4\""
+  echo "                       Supported models:$models"
   echo
   echo "  -h, --help           Print this help message"
 }
@@ -112,7 +112,7 @@ else
 fi
 
 # check that the model is in the list of models
-if ! [[ "${models[*]}" =~ "$model" ]]; then
+if  ! [[ "$models" == *" $model "* ]]; then
   echo -e "${C_RED}Error: Model '$model' is not supported${NO_FORMAT}"
   exit 1
 fi
