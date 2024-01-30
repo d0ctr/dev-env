@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # coloring
 NO_FORMAT="\033[0m"
