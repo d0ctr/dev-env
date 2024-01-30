@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 NO_FORMAT="\033[0m"
 C_YELLOW="\033[38;5;11m"
