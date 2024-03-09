@@ -8,8 +8,9 @@ C_RED="\033[38;5;9m"
 spin() {
   local spin_chars="⡿⢿⣻⣽⣾⣷⣯⣟"
   local i=0
-  while [ true ]; do
-    printf "\rInstalling ${C_YELLOW}${spin_chars:i++%8:1}${NO_FORMAT} "
+  trap 'echo -e "\b\b\033[0m"; exit' INT
+  while true; do
+    printf "\rInstalling ${C_YELLOW}${spin_chars:$((i++%8)):1}${NO_FORMAT} "
     sleep 0.1
   done
 }
@@ -29,7 +30,7 @@ mkdir -p "$destination_path"
 # Clone the repository
 git_result=$(git clone "$repository" temp_repo 2>&1)
 git_code=$?
-if [[ "$git_code" != "0" ]]; then
+if [ "$git_code" != "0" ]; then
   kill $spinner &> /dev/null
   echo -e "\b\b${C_RED}\xE2\x9C\x97${NO_FORMAT}"
   echo $git_result
