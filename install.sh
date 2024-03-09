@@ -10,7 +10,9 @@ spin() {
   local i=0
   trap 'echo -e "\b\b\033[0m"; exit' INT
   while true; do
-    printf "\rInstalling ${C_YELLOW}${spin_chars:$((i++%8)):1}${NO_FORMAT} "
+    local temp=${spin_chars#?}
+    printf "\rInstalling ${C_YELLOW}[%c]${NO_FORMAT} " "$spin_chars"
+    local spin_chars=$temp${spin_chars%"$temp"}
     sleep 0.1
   done
 }
