@@ -1,25 +1,33 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "features": {
-    "ghcr.io/devcontainers/features/desktop-lite:1": {},
-    "ghcr.io/devcontainers/features/python": {},
-    "ghcr.io/wxw-matt/devcontainer-features/apt:latest": {
-			"packages": "curl build-essential zsh"
-    },
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
-    },
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-  },
-  "customizations": {
-    "vscode": {
-        "settings": {
-            "terminal.integrated.defaultProfile.linux": "zsh",
-            "terminal.integrated.profiles.linux": { "zsh": { "path": "/bin/zsh" } },
-            "workbench.colorTheme": "GitHub Dark Default",
-            "editor.fontFamily": "'Roboto Mono', 'Courier New', monospace"
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "20"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/rust:1": {},
+        "ghcr.io/wxw-matt/devcontainer-features/apt:latest": {
+            "packages": "curl build-essential zsh"
+        },
+        "ghcr.io/duduribeiro/devcontainer-features/neovim:1": {
+            "version": "stable"
+        }, 
+        "ghcr.io/duduribeiro/devcontainer-features/tmux:1": {
+            "version": "latest"
         }
-    }
-  },
-  "postStartCommand":  "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/d0ctr/dev-env/main/install.sh)\""
+    },
+    "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                "terminal.integrated.profiles.linux": { "zsh": { "path": "/bin/zsh" } },
+                "workbench.colorTheme": "GitHub Dark Default",
+                "editor.fontFamily": "'Roboto Mono', 'Courier New', monospace"
+            }
+        }
+    },
+    "postCreateCommand":  "sh -c \"$(curl -fsSL https://raw.githubusercontent.com/d0ctr/dev-env/main/install.sh)\""
 }
