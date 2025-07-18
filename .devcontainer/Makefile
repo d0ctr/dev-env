@@ -1,8 +1,8 @@
 all: build
 
 build:
-	docker build -t devcontainter -f Dockerfile.workspace .
+	docker build --build-arg USER=workspace -t devcontainer -f Dockerfile.nvim .
 
 run:
-	docker run --rm -it --user vscode devcontainter:latest nvim .config/nvim
+	docker run --rm -it --volume "./home:/home/vscode" devcontainer:latest nvim
 
